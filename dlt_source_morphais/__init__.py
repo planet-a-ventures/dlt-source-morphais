@@ -1,11 +1,12 @@
 """A source loading entities and lists from Morphais  (morphais.com)"""
 
-from typing import Iterable, List, Sequence
+from typing import Any, Iterable, List, Optional, Sequence
 import logging
 import dlt
 from dlt.common.typing import TDataItem
 from dlt.sources import DltResource
 from dlt.common.logger import is_logging
+from pydantic import ValidationError
 
 # from dlt.common.schema.typing import TTableReferenceParam
 # from dlt.common.libs.pydantic import DltConfig
@@ -42,7 +43,9 @@ if is_logging():
     logger.addFilter(HideSpecificWarning())
 
 
-def use_id(entity: Startup):
+def use_id(entity: Optional[Startup]):
+    if entity is None:
+        return None
     return pydantic_model_dump(entity) | {"_dlt_id": entity.id}
 
 
@@ -69,6 +72,16 @@ def list_startups() -> Iterable[TDataItem]:
 # setattr(FlattenedInteraction, "dlt_config", dlt_config)
 
 
+def parse_startup(startup: Any):
+    ret = None
+    try:
+        ret = startup_adapter.validate_python(startup)[0]
+    except ValidationError as e:
+        logging.error(f"Failed to validate startup: {startup}")
+        logging.error(e)
+    return ret
+
+
 @dlt.resource(
     primary_key="id",
     columns=Startup,
@@ -83,7 +96,7 @@ def startups(
     rest_client = get_rest_client(single_page=True)
 
     yield from (
-        use_id(startup_adapter.validate_python(startup)[0])
+        use_id(parse_startup(startup))
         for startup_list_item in startups_arr
         for startup in rest_client.paginate(
             STARTUP,

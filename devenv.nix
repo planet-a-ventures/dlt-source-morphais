@@ -34,6 +34,7 @@
   '';
 
   scripts.refresh-model.exec = ''
+    set -euo pipefail
     update-spec
     generate-model
     git add dlt_source_morphais/model/spec.py

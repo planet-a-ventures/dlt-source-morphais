@@ -70,7 +70,7 @@ class Experience(BaseModel):
     """
     Indicator if the person is a founder (0 or 1).
     """
-    role: str
+    role: str | None = None
     """
     Role of the person at the company.
     """

@@ -118,7 +118,7 @@ components:
           description: The target audience.
           example: B2C
         city:
-          type: string
+          type: [string, "null"]
           description: City where the startup is located.
         country:
           type: string

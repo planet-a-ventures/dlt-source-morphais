@@ -106,6 +106,7 @@ components:
           description: The funding stage of the startup.
         registry_id:
           type: string
+          nullable: true
           description: Registry identifier.
         legal_form:
           type: string
@@ -137,7 +138,6 @@ components:
         - resources
         - founding_date
         - funding_stage
-        - registry_id
         - legal_form
         - audience
         - city

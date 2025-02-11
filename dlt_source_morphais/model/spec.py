@@ -171,11 +171,11 @@ class Startup(BaseModel):
     """
     Social and external resources related to the startup.
     """
-    founding_date: date
+    founding_date: date | None = None
     """
     The founding date of the startup.
     """
-    funding_stage: str
+    funding_stage: str | None = None
     """
     The funding stage of the startup.
     """

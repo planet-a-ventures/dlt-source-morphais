@@ -225,9 +225,12 @@ components:
           type: string
           description: Subject studied.
         education_start:
-          type: string
-          format: date
-          description: Start date of the education.
+          oneOf:
+            - type: string
+              format: date
+            - type: string
+              enum: ["No start date"]
+          description: Start date of the education, or "No start date" if unknown.
         education_end:
           oneOf:
             - type: string

@@ -20,7 +20,7 @@ class StartupListItem(BaseModel):
     """
     Name of the startup.
     """
-    desc_short: str
+    desc_short: str | None = None
     """
     A short description of the startup.
     """
@@ -151,7 +151,7 @@ class Startup(BaseModel):
     """
     Name of the startup.
     """
-    desc_short: str
+    desc_short: str | None = None
     """
     A short description of the startup.
     """

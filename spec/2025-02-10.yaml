@@ -223,6 +223,7 @@ components:
           description: Degree obtained.
         education_subject:
           type: string
+          nullable: true
           description: Subject studied.
         education_start:
           oneOf:

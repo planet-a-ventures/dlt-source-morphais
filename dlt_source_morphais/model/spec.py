@@ -116,7 +116,7 @@ class Person(BaseModel):
     """
     Name of the person.
     """
-    person_linkedin: str
+    person_linkedin: AnyUrl | None = None
     """
     LinkedIn profile URL of the person.
     """
@@ -124,7 +124,7 @@ class Person(BaseModel):
     """
     List of highlights for the person.
     """
-    gender: str
+    gender: str | None = None
     """
     Gender of the person.
     """

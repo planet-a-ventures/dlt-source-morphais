@@ -58,7 +58,7 @@ class ExperienceEnd(Enum):
 
 
 class Experience(BaseModel):
-    experience_company: str
+    experience_company: str | None = None
     """
     Name of the company where the experience was gained.
     """

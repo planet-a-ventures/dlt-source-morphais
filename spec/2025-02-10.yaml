@@ -199,14 +199,19 @@ components:
           type: string
           description: Role of the person at the company.
         experience_start:
-          type: string
-          format: date
-          description: Start date of the experience.
+          oneOf:
+            - type: string
+              format: date
+            - type: string
+              # TODO: this should probably just be null instead of a string
+              enum: ["No start date"]
+          description: Start date of the experience, or "No start date" if unknown.
         experience_end:
           oneOf:
             - type: string
               format: date
             - type: string
+              # TODO: this should probably just be null instead of a string
               enum: ["Present"]
           description: End date of the experience (or "Present" if ongoing).
       required:
@@ -234,6 +239,7 @@ components:
             - type: string
               format: date
             - type: string
+              # TODO: this should probably just be null instead of a string
               enum: ["No start date"]
           description: Start date of the education, or "No start date" if unknown.
         education_end:
@@ -241,6 +247,7 @@ components:
             - type: string
               format: date
             - type: string
+              # TODO: this should probably just be null instead of a string
               enum: ["Present"]
           description: End date of the education, or "Present" if the education is ongoing.
       required:

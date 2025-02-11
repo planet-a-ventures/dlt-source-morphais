@@ -83,7 +83,7 @@ def startups(
     rest_client = get_rest_client(single_page=True)
 
     yield from (
-        use_id(startup_adapter.validate_python(startup))
+        use_id(startup_adapter.validate_python(startup)[0])
         for startup_list_item in startups_arr
         for startup in rest_client.paginate(
             STARTUP,

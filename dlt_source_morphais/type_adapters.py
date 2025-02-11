@@ -5,4 +5,4 @@ from pydantic import TypeAdapter
 
 
 list_adapter = TypeAdapter(list[StartupListItem])
-startup_adapter = TypeAdapter(Startup)
+startup_adapter = TypeAdapter(list[Startup])

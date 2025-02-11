@@ -21,7 +21,15 @@
   languages.python.version = "3.12";
 
   scripts.generate-model.exec = ''
-    ./source/model/generate_model.sh
+    ./dlt_source_morphais/model/generate_model.sh
+  '';
+
+  scripts.update-spec.exec = ''
+    git subtree pull \
+      --prefix dlt_source_morphais/model/spec \
+      https://github.com/planet-a-ventures/morphais-openapi-spec.git \
+      main \
+      --squash
   '';
 
   git-hooks.hooks = {

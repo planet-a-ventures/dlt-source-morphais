@@ -5,6 +5,7 @@ from dlt.sources.helpers.rest_client.auth import APIKeyAuth
 from dlt.sources.helpers.rest_client.client import RESTClient
 from dlt.sources.helpers.rest_client.paginators import (
     PageNumberPaginator,
+    SinglePagePaginator,
 )
 
 from .settings import API_BASE
@@ -19,15 +20,21 @@ def get_rest_client(
     email: str = dlt.secrets["morphais_email"],
     api_key: str = dlt.secrets["morphais_api_key"],
     api_base: str = API_BASE,
+    single_page: bool = False,
 ):
     global session
     client = RESTClient(
         base_url=api_base,
         headers={"Accept": "application/json", "morphaisemail": email},
         auth=APIKeyAuth(name="morphaiskey", api_key=api_key),
-        paginator=PageNumberPaginator(
-            base_page=1,
-            stop_after_empty_page=True,
+        paginator=(
+            SinglePagePaginator()
+            if single_page
+            else PageNumberPaginator(
+                base_page=1,
+                stop_after_empty_page=True,
+                total_path=None,
+            )
         ),
         session=session,
     )

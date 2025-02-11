@@ -80,7 +80,7 @@ def list_startups() -> Iterable[TDataItem]:
 def startups(
     startups_arr: List[StartupListItem],
 ):
-    rest_client = get_rest_client()
+    rest_client = get_rest_client(single_page=True)
 
     yield from (
         use_id(startup_adapter.validate_python(startup))

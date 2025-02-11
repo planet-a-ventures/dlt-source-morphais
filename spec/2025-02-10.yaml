@@ -124,7 +124,7 @@ components:
           type: string
           description: Country where the startup is located.
         address:
-          type: string
+          type: [string, null]
           description: Address of the startup.
         persons:
           type: array

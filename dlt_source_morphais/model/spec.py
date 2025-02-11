@@ -5,10 +5,10 @@ from __future__ import annotations
 
 from datetime import date
 from enum import Enum
-from typing import List
+from typing import Annotated, List
 from uuid import UUID
 
-from pydantic import AnyUrl, BaseModel
+from pydantic import AnyUrl, BaseModel, Field
 
 
 class StartupListItem(BaseModel):
@@ -179,13 +179,13 @@ class Startup(BaseModel):
     """
     Registry identifier.
     """
-    legal_form: str
+    legal_form: Annotated[str, Field(examples=["Ltd."])]
     """
-    Legal form of the startup (e.g., Ltd.).
+    Legal form of the startup.
     """
-    audience: str
+    audience: Annotated[str | None, Field(examples=["B2C"])] = None
     """
-    The target audience (e.g., B2C).
+    The target audience.
     """
     city: str
     """

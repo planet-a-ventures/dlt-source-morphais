@@ -53,6 +53,10 @@ class Resources(BaseModel):
     """
 
 
+class ExperienceStart(Enum):
+    NO_START_DATE = "No start date"
+
+
 class ExperienceEnd(Enum):
     PRESENT = "Present"
 
@@ -70,9 +74,9 @@ class Experience(BaseModel):
     """
     Role of the person at the company.
     """
-    experience_start: date
+    experience_start: date | ExperienceStart
     """
-    Start date of the experience.
+    Start date of the experience, or "No start date" if unknown.
     """
     experience_end: date | ExperienceEnd
     """

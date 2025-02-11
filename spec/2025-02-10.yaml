@@ -100,9 +100,10 @@ components:
         founding_date:
           type: string
           format: date
+          nullable: true
           description: The founding date of the startup.
         funding_stage:
-          type: string
+          type: [string, "null"]
           description: The funding stage of the startup.
         registry_id:
           type: string
@@ -139,7 +140,6 @@ components:
         - industries
         - solutions
         - resources
-        - founding_date
         - funding_stage
         - legal_form
         - city

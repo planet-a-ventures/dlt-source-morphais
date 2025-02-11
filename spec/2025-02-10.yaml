@@ -198,8 +198,12 @@ components:
           format: date
           description: Start date of the experience.
         experience_end:
-          type: string
-          description: End date of the experience (or 'Present' if ongoing).
+          oneOf:
+            - type: string
+              format: date
+            - type: string
+              enum: ["Present"]
+          description: End date of the experience (or "Present" if ongoing).
       required:
         - experience_company
         - experience_founder
@@ -225,9 +229,12 @@ components:
           format: date
           description: Start date of the education.
         education_end:
-          type: string
-          format: date
-          description: End date of the education.
+          oneOf:
+            - type: string
+              format: date
+            - type: string
+              enum: ["Present"]
+          description: End date of the education, or "Present" if the education is ongoing.
       required:
         - education_degree
         - education_subject

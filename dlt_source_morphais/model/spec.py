@@ -191,7 +191,7 @@ class Startup(BaseModel):
     """
     The target audience.
     """
-    city: str
+    city: str | None = None
     """
     City where the startup is located.
     """

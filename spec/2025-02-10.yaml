@@ -110,10 +110,13 @@ components:
           description: Registry identifier.
         legal_form:
           type: string
-          description: Legal form of the startup (e.g., Ltd.).
+          description: Legal form of the startup.
+          example: Ltd.
         audience:
           type: string
-          description: The target audience (e.g., B2C).
+          nullable: true
+          description: The target audience.
+          example: B2C
         city:
           type: string
           description: City where the startup is located.
@@ -139,7 +142,6 @@ components:
         - founding_date
         - funding_stage
         - legal_form
-        - audience
         - city
         - country
         - address

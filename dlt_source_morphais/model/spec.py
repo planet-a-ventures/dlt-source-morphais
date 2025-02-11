@@ -80,6 +80,10 @@ class Experience(BaseModel):
     """
 
 
+class EducationStart(Enum):
+    NO_START_DATE = "No start date"
+
+
 class EducationEnd(Enum):
     PRESENT = "Present"
 
@@ -97,9 +101,9 @@ class Education(BaseModel):
     """
     Subject studied.
     """
-    education_start: date
+    education_start: date | EducationStart
     """
-    Start date of the education.
+    Start date of the education, or "No start date" if unknown.
     """
     education_end: date | EducationEnd
     """

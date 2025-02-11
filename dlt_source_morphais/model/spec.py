@@ -97,7 +97,7 @@ class Education(BaseModel):
     """
     Degree obtained.
     """
-    education_subject: str
+    education_subject: str | None = None
     """
     Subject studied.
     """

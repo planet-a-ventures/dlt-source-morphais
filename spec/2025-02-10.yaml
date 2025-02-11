@@ -153,6 +153,8 @@ components:
           description: Name of the person.
         person_linkedin:
           type: string
+          format: uri
+          nullable: true
           description: LinkedIn profile URL of the person.
         highlights:
           type: array
@@ -161,6 +163,7 @@ components:
           description: List of highlights for the person.
         gender:
           type: string
+          nullable: true
           description: Gender of the person.
         experience:
           type: array
@@ -174,9 +177,7 @@ components:
           description: Educational background of the person.
       required:
         - person_name
-        - person_linkedin
         - highlights
-        - gender
         - experience
         - education
     Experience:

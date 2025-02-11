@@ -1,0 +1,358 @@
+openapi: 3.1.0
+info:
+  title: Morphais External API
+  version: "1.0.0"
+  description: This API provides access to Morphais startup data.
+servers:
+  - url: https://backend-prod.morphais.de/api/external-api
+components:
+  securitySchemes:
+    MorphaisAuth:
+      type: apiKey
+      in: header
+      name: morphaisemail
+      description: Morphais account email for authentication.
+    MorphaisKey:
+      type: apiKey
+      in: header
+      name: morphaiskey
+      description: API key generated from the Morphais dashboard.
+  schemas:
+    StartupListItem:
+      type: object
+      description: A startup item returned in the list (subset of fields).
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the startup.
+        name:
+          type: string
+          description: Name of the startup.
+        desc_short:
+          type: string
+          description: A short description of the startup.
+      required:
+        - id
+        - name
+        - desc_short
+    Startup:
+      type: object
+      description: Detailed information about a startup.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the startup.
+        name:
+          type: string
+          description: Name of the startup.
+        desc_short:
+          type: string
+          description: A short description of the startup.
+        desc_long:
+          type: string
+          description: A long description of the startup.
+        industries:
+          type: array
+          items:
+            type: string
+          description: List of industries associated with the startup.
+        solutions:
+          type: array
+          items:
+            type: string
+          description: List of solutions provided by the startup.
+        resources:
+          type: object
+          description: Social and external resources related to the startup.
+          properties:
+            website:
+              type: string
+              format: uri
+              nullable: true
+              description: Website URL of the startup.
+            linkedin:
+              type: string
+              format: uri
+              nullable: true
+              description: LinkedIn profile URL.
+            facebook:
+              type: string
+              format: uri
+              nullable: true
+              description: Facebook page URL.
+            twitter:
+              type: string
+              format: uri
+              nullable: true
+              description: Twitter profile URL.
+            github:
+              type: string
+              format: uri
+              nullable: true
+              description: GitHub repository URL.
+            filling_history:
+              type: string
+              format: uri
+              nullable: true
+              description: Filing registry URL.
+        founding_date:
+          type: string
+          format: date
+          description: The founding date of the startup.
+        funding_stage:
+          type: string
+          description: The funding stage of the startup.
+        registry_id:
+          type: string
+          description: Registry identifier.
+        legal_form:
+          type: string
+          description: Legal form of the startup (e.g., Ltd.).
+        audience:
+          type: string
+          description: The target audience (e.g., B2C).
+        city:
+          type: string
+          description: City where the startup is located.
+        country:
+          type: string
+          description: Country where the startup is located.
+        address:
+          type: string
+          description: Address of the startup.
+        persons:
+          type: array
+          items:
+            $ref: "#/components/schemas/Person"
+          description: List of persons (e.g., founders) associated with the startup.
+      required:
+        - id
+        - name
+        - desc_short
+        - desc_long
+        - industries
+        - solutions
+        - resources
+        - founding_date
+        - funding_stage
+        - registry_id
+        - legal_form
+        - audience
+        - city
+        - country
+        - address
+        - persons
+    Person:
+      type: object
+      description: Information about a person (e.g., a founder) related to the startup.
+      properties:
+        person_name:
+          type: string
+          description: Name of the person.
+        person_linkedin:
+          type: string
+          description: LinkedIn profile URL of the person.
+        highlights:
+          type: array
+          items:
+            type: string
+          description: List of highlights for the person.
+        gender:
+          type: string
+          description: Gender of the person.
+        experience:
+          type: array
+          items:
+            $ref: "#/components/schemas/Experience"
+          description: Work experience of the person.
+        education:
+          type: array
+          items:
+            $ref: "#/components/schemas/Education"
+          description: Educational background of the person.
+      required:
+        - person_name
+        - person_linkedin
+        - highlights
+        - gender
+        - experience
+        - education
+    Experience:
+      type: object
+      description: Work experience details.
+      properties:
+        experience_company:
+          type: string
+          description: Name of the company where the experience was gained.
+        experience_founder:
+          # TODO: Change to boolean
+          type: integer
+          description: Indicator if the person is a founder (0 or 1).
+        role:
+          type: string
+          description: Role of the person at the company.
+        experience_start:
+          type: string
+          format: date
+          description: Start date of the experience.
+        experience_end:
+          type: string
+          description: End date of the experience (or 'Present' if ongoing).
+      required:
+        - experience_company
+        - experience_founder
+        - role
+        - experience_start
+        - experience_end
+    Education:
+      type: object
+      description: Educational background details.
+      properties:
+        education_school:
+          type: string
+          nullable: true
+          description: Name of the school or college.
+        education_degree:
+          type: string
+          description: Degree obtained.
+        education_subject:
+          type: string
+          description: Subject studied.
+        education_start:
+          type: string
+          format: date
+          description: Start date of the education.
+        education_end:
+          type: string
+          format: date
+          description: End date of the education.
+      required:
+        - education_degree
+        - education_subject
+        - education_start
+        - education_end
+security:
+  - MorphaisAuth: []
+    MorphaisKey: []
+paths:
+  /list-startups:
+    get:
+      summary: List startups
+      description: >
+        Lists all available startups in the Morphais database. Returns a subset of startup information.
+
+      security:
+        - MorphaisAuth: []
+          MorphaisKey: []
+      parameters:
+        - in: query
+          name: date
+          schema:
+            type: string
+            format: date
+            example: 2022-01-30
+          description: Select startups with a date greater than or equal to the specified date.
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Select the page number (pagination as on the dashboard).
+        - in: query
+          name: take
+          schema:
+            type: integer
+            default: 50
+            minimum: 1
+            maximum: 50
+          description: Specify how many startups to display.
+        - in: query
+          name: education
+          schema:
+            type: string
+          description: Filter on education type (case-insensitive).
+        - in: query
+          name: experience
+          schema:
+            type: string
+          description: Filter on work experience (case-insensitive).
+        - in: query
+          name: industries
+          schema:
+            type: array
+            items:
+              type: string
+            example: ["Audiotech", "Beauty", "IoT"]
+          style: form
+          explode: false
+          description: |
+            Filter on industry type. Accepts a comma-separated list of industries.
+            **Case-sensitive.**
+        - in: query
+          name: solutions
+          schema:
+            type: array
+            items:
+              type: string
+            example: ["3D printing", "App"]
+          style: form
+          explode: false
+          description: |
+            Filter on solution type. Accepts a comma-separated list of solutions.
+            **Case-sensitive.**
+        - in: query
+          name: highlights
+          schema:
+            type: array
+            items:
+              type: string
+            example: ["Top University", "PhD"]
+          style: form
+          explode: false
+          description: |
+            Filter on founder highlights. Accepts a comma-separated list.
+            **Case-sensitive.**
+      responses:
+        "200":
+          description: Successful response. Returns an array of startup list items.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/StartupListItem"
+        "400":
+          description: Bad Request
+  /startup:
+    get:
+      summary: Get startup details
+      description: >
+        Provides detailed information about a specific startup. You can specify the startup by its unique id or by its name.
+
+      security:
+        - MorphaisAuth: []
+          MorphaisKey: []
+      parameters:
+        - in: query
+          name: id
+          schema:
+            type: string
+          description: Unique identifier of the startup.
+        - in: query
+          name: name
+          schema:
+            type: string
+          description: Startup name.
+      responses:
+        "200":
+          description: Successful response. Returns detailed startup information.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Startup"
+        "400":
+          description: Bad Request

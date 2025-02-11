@@ -199,7 +199,7 @@ class Startup(BaseModel):
     """
     Country where the startup is located.
     """
-    address: str
+    address: str | None = None
     """
     Address of the startup.
     """

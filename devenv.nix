@@ -25,11 +25,19 @@
   '';
 
   scripts.update-spec.exec = ''
-    git subtree pull \
+    GIT_MERGE_AUTOEDIT=no \
+      git subtree pull \
       --prefix dlt_source_morphais/model/spec \
       https://github.com/planet-a-ventures/morphais-openapi-spec.git \
       main \
       --squash
+  '';
+
+  scripts.refresh-model.exec = ''
+    update-spec
+    generate-model
+    git add dlt_source_morphais/model/spec.py
+    git commit -m'chore: update model'
   '';
 
   git-hooks.hooks = {

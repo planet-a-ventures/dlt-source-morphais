@@ -188,6 +188,8 @@ components:
       properties:
         experience_company:
           type: string
+          # TODO: This should not really be nullable
+          nullable: true
           description: Name of the company where the experience was gained.
         experience_founder:
           # TODO: Change to boolean
@@ -208,7 +210,6 @@ components:
               enum: ["Present"]
           description: End date of the experience (or "Present" if ongoing).
       required:
-        - experience_company
         - experience_founder
         - role
         - experience_start

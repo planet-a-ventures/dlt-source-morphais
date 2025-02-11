@@ -175,7 +175,7 @@ class Startup(BaseModel):
     """
     The funding stage of the startup.
     """
-    registry_id: str
+    registry_id: str | None = None
     """
     Registry identifier.
     """

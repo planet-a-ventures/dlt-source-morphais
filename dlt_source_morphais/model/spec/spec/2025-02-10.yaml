@@ -196,7 +196,7 @@ components:
           type: integer
           description: Indicator if the person is a founder (0 or 1).
         role:
-          type: string
+          type: [string, "null"]
           description: Role of the person at the company.
         experience_start:
           oneOf:

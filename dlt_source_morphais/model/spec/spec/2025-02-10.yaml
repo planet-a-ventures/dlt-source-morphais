@@ -241,7 +241,6 @@ components:
           description: End date of the education, or "Present" if the education is ongoing.
       required:
         - education_degree
-        - education_subject
         - education_start
         - education_end
 security:

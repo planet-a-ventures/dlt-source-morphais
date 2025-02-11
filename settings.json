@@ -1,0 +1,8 @@
+{
+    "python.testing.pytestArgs": [
+        "dlt_source_morphais"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "debugpy.debugJustMyCode": true
+}

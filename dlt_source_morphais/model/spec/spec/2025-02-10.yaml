@@ -30,7 +30,7 @@ components:
           type: string
           description: Name of the startup.
         desc_short:
-          type: string
+          type: [string, "null"]
           description: A short description of the startup.
       required:
         - id
@@ -48,7 +48,7 @@ components:
           type: string
           description: Name of the startup.
         desc_short:
-          type: string
+          type: [string, "null"]
           description: A short description of the startup.
         desc_long:
           type: string

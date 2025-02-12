@@ -9,12 +9,13 @@ from dlt.common.logger import is_logging
 from pydantic import ValidationError
 
 # from dlt.common.schema.typing import TTableReferenceParam
-# from dlt.common.libs.pydantic import DltConfig
+from dlt.common.libs.pydantic import DltConfig
 from .settings import LIST_STARTUPS, STARTUP
 from pydantic import BaseModel
 from .rest_client import get_rest_client, MAX_PAGE_LIMIT
 from .type_adapters import startup_adapter, list_adapter
 from .model.spec import Startup, StartupListItem
+from dlt.sources.helpers.rest_client.client import PageData
 
 
 def pydantic_model_dump(model: BaseModel, **kwargs):
@@ -68,11 +69,11 @@ def list_startups() -> Iterable[TDataItem]:
 
 
 # FlattenedInteraction = flatten_root_model(Interaction)
-# dlt_config: DltConfig = {"skip_nested_types": True}
-# setattr(FlattenedInteraction, "dlt_config", dlt_config)
+dlt_config: DltConfig = {"skip_nested_types": True}
+setattr(Startup, "dlt_config", dlt_config)
 
 
-def parse_startup(startup: Any):
+def parse_startup(startup: PageData[Any]):
     ret = None
     try:
         ret = startup_adapter.validate_python(startup)[0]

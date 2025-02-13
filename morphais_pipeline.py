@@ -9,12 +9,13 @@ def load_morphais_data() -> None:
         pipeline_name="morphais_pipeline", destination="duckdb", dev_mode=DEV_MODE
     )
     data = source(
-        dev_mode=DEV_MODE,
+        limit=-1 if not DEV_MODE else 1,
     )
-    # if DEV_MODE:
-    #     data.add_limit(1)
     info = pipeline.run(
-        data, refresh="drop_sources", schema_contract={"columns": "evolve"}
+        data,
+        refresh="drop_sources" if DEV_MODE else None,
+        # we need this in case new resources, etc. are added
+        schema_contract={"columns": "evolve"},
     )
     print(info)
 

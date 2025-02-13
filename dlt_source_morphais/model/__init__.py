@@ -14,6 +14,10 @@ class Degree(StrEnum):
     UNKNOWN = "Degree unknown"
 
 
+class LegalForm(StrEnum):
+    NO_LEGAL_FORM = "No legal form"
+
+
 class MyBaseModel(BaseModel):
 
     @staticmethod
@@ -92,6 +96,16 @@ class MyBaseModel(BaseModel):
         Education = getattr(spec_module, "Education")
 
         if cls == Education and v == Degree.UNKNOWN.value:
+            return None
+        else:
+            return handler(v)
+
+    @field_validator("legal_form", mode="wrap", check_fields=False)
+    def custom_parse_legal_form(cls, v, handler: ValidatorFunctionWrapHandler):
+        spec_module = importlib.import_module(".spec", package=__package__)
+        Startup = getattr(spec_module, "Startup")
+
+        if cls == Startup and v == LegalForm.NO_LEGAL_FORM.value:
             return None
         else:
             return handler(v)

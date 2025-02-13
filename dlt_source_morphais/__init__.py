@@ -10,8 +10,8 @@ from dlt.sources import DltResource
 from dlt.common.logger import is_logging
 from pydantic import ValidationError
 import asyncio
+import re
 
-# from dlt.common.schema.typing import TTableReferenceParam
 from dlt.common.libs.pydantic import DltConfig
 from .settings import LIST_STARTUPS, STARTUP
 from pydantic import BaseModel
@@ -19,7 +19,6 @@ from .rest_client import get_rest_client, MAX_PAGE_LIMIT
 from .type_adapters import startup_adapter, list_adapter
 from .model.spec import Startup
 
-# from .model.my_spec import ExtendedStartup as Startup
 from dlt.sources.helpers.rest_client.client import PageData
 
 
@@ -50,8 +49,22 @@ if is_logging():
             return True  # Allow all other logs
 
     logger = logging.getLogger("dlt")
-    logger.addFilter
     logger.addFilter(HideSpecificWarning())
+
+    class HideSinglePagingNonsense(logging.Filter):
+        def filter(self, record):
+            msg = record.getMessage()
+            if (
+                "Extracted data of type list from path $ with length 1" in msg
+                or re.match(
+                    r"Paginator SinglePagePaginator at [a-fA-F0-9]+ does not have more pages",
+                    msg,
+                )
+            ):
+                return False
+            return True
+
+    logger.addFilter(HideSinglePagingNonsense())
 
 
 def use_id(entity: Startup, **kwargs) -> dict:
@@ -73,7 +86,6 @@ def list_startups() -> Iterable[TDataItem]:
     )
 
 
-# FlattenedInteraction = flatten_root_model(Interaction)
 dlt_config: DltConfig = {"skip_nested_types": True}
 setattr(Startup, "dlt_config", dlt_config)
 
@@ -95,7 +107,7 @@ async def fetch_startup(id: UUID):
         lambda: list(
             rest_client.paginate(
                 STARTUP,
-                params={"id": id},
+                params={"id": str(id)},
             )
         )
     )
@@ -104,6 +116,13 @@ async def fetch_startup(id: UUID):
         for parsed in (parse_startup(startup) for startup in startups)
         if parsed is not None
     ]
+
+
+enum_fields = ["audience", "legal_form", "funding_stage", "industries", "solutions"]
+
+
+def pluralize(field_name: str):
+    return field_name + "s" if field_name[-1] != "s" else field_name
 
 
 @dlt.transformer(
@@ -140,28 +159,36 @@ async def startup_details(ids: List[UUID]):
                     create_table_variant=True,
                 )
 
+            for field_name in enum_fields:
+                data = getattr(startup, field_name)
+                if not data or len(data) == 0:
+                    continue
+                items = (
+                    [{"value": data}]
+                    if not isinstance(data, list)
+                    else [{"value": x} for x in data]
+                )
+
+                yield dlt.mark.with_hints(
+                    item=items,
+                    hints=dlt.mark.make_hints(
+                        table_name=pluralize(field_name),
+                        primary_key="value",
+                        merge_key="value",
+                        write_disposition="merge",
+                    ),
+                    # needs to be a variant due to https://github.com/dlt-hub/dlt/pull/2109
+                    create_table_variant=True,
+                )
+
             yield dlt.mark.with_hints(
                 item=use_id(startup, exclude={"persons"}),
                 hints=dlt.mark.make_hints(
                     table_name=Table.STARTUPS.value,
                 ),
+                # needs to be a variant due to https://github.com/dlt-hub/dlt/pull/2109
                 create_table_variant=True,
             )
-
-
-# async def startup_details(
-#     ids: List[UUID],
-# ):
-#     rest_client = get_rest_client(single_page=True)
-
-#     for id in ids:
-#         for startup in rest_client.paginate(
-#             STARTUP,
-#             params={
-#                 "id": id,
-#             },
-#         ):
-#             yield use_id(parse_startup(startup))
 
 
 # TODO: Workaround for the fact that when `add_limit` is used, the yielded entities
@@ -172,70 +199,12 @@ def __get_id(obj):
     return getattr(obj, "id", None)
 
 
-# def __create_entity_resource(entity_name: ENTITY, dev_mode=False) -> DltResource:
-#     datacls = get_entity_data_class_paged(entity_name)
-#     name = entity_name
-
-#     @dlt.transformer(
-#         # we fetch IDs for all entities first,
-#         # without any data, so we can parallelize the more expensive data fetching
-#         # whilst not hitting the API limits so fast and we can parallelize
-#         # because we don't need to page with cursors
-#         data_from=__create_id_resource(entity_name, dev_mode=dev_mode),
-#         write_disposition="replace",
-#         parallelized=True,
-#         primary_key="id",
-#         merge_key="id",
-#         max_table_nesting=3,
-#         name=name,
-#     )
-#     def __entities(
-#         entity_arr: List[Company | Person | Opportunity],
-#     ) -> Iterable[TDataItem]:
-#         rest_client = get_v2_rest_client()
-
-#         ids = [__get_id(x) for x in entity_arr]
-#         response = rest_client.get(
-#             entity_name,
-#             params={
-#                 "limit": len(ids),
-#                 "ids": ids,
-#                 "fieldTypes": [
-#                     Type2.ENRICHED.value,
-#                     Type2.GLOBAL_.value,
-#                     Type2.RELATIONSHIP_INTELLIGENCE.value,
-#                 ],
-#             },
-#             hooks=hooks,
-#         )
-#         response.raise_for_status()
-#         entities = datacls.model_validate_json(json_data=response.text)
-
-#         for e in entities.data:
-#             (ret, references) = yield from process_and_yield_fields(e, name)
-#             yield dlt.mark.with_hints(
-#                 item=pydantic_model_dump(e, exclude={"fields"})
-#                 | ret
-#                 | {"_dlt_id": e.id},
-#                 hints=dlt.mark.make_hints(
-#                     table_name=name,
-#                     references=references,
-#                 ),
-#                 # needs to be a variant due to https://github.com/dlt-hub/dlt/pull/2109
-#                 create_table_variant=True,
-#             )
-
-#     __entities.__name__ = name
-#     __entities.__qualname__ = name
-#     return __entities
-
-
 @dlt.source(name="morphais")
-def source(dev_mode: bool = False) -> Sequence[DltResource]:
+def source(limit=-1) -> Sequence[DltResource]:
 
     startups_list = list_startups()
-    if dev_mode:
-        startups_list = startups_list.add_limit(5)
+    if limit > 0:
+        startups_list = startups_list.add_limit(limit)
 
     return (startups_list | startup_details,)
 

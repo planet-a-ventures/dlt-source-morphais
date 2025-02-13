@@ -29,6 +29,7 @@ def get_rest_client(
         base_url=api_base,
         headers={"Accept": "application/json", "morphaisemail": email},
         auth=APIKeyAuth(name="morphaiskey", api_key=api_key),
+        data_selector="$",
         paginator=(
             SinglePagePaginator()
             if single_page

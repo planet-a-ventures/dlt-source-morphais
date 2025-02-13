@@ -68,54 +68,49 @@ components:
           description: Social and external resources related to the startup.
           properties:
             website:
-              type: string
-              format: uri
-              nullable: true
+              oneOf:
+                - type: string
+                  format: uri
+                - type: string
+                  format: hostname
+                - type: "null"
               description: Website URL of the startup.
             linkedin:
-              type: string
+              type: [string, "null"]
               format: uri
-              nullable: true
               description: LinkedIn profile URL.
             facebook:
-              type: string
+              type: [string, "null"]
               format: uri
-              nullable: true
               description: Facebook page URL.
             twitter:
-              type: string
+              type: [string, "null"]
               format: uri
-              nullable: true
               description: Twitter profile URL.
             github:
-              type: string
+              type: [string, "null"]
               format: uri
-              nullable: true
               description: GitHub repository URL.
             filling_history:
-              type: string
+              type: [string, "null"]
               format: uri
-              nullable: true
               description: Filing registry URL.
         founding_date:
-          type: string
+          type: [string, "null"]
           format: date
-          nullable: true
           description: The founding date of the startup.
         funding_stage:
           type: [string, "null"]
           description: The funding stage of the startup.
         registry_id:
-          type: string
-          nullable: true
+          type: [string, "null"]
           description: Registry identifier.
         legal_form:
           type: string
           description: Legal form of the startup.
           example: Ltd.
         audience:
-          type: string
-          nullable: true
+          type: [string, "null"]
           description: The target audience.
           example: B2C
         city:
@@ -140,12 +135,15 @@ components:
         - industries
         - solutions
         - resources
+        - founding_date
         - funding_stage
         - legal_form
         - city
         - country
         - address
         - persons
+        - audience
+        - registry_id
     Person:
       type: object
       description: Information about a person (e.g., a founder) related to the startup.
@@ -154,9 +152,8 @@ components:
           type: string
           description: Name of the person.
         person_linkedin:
-          type: string
+          type: [string, "null"]
           format: uri
-          nullable: true
           description: LinkedIn profile URL of the person.
         highlights:
           type: array
@@ -164,8 +161,8 @@ components:
             type: string
           description: List of highlights for the person.
         gender:
-          type: string
-          nullable: true
+          type: [string, "null"]
+          enum: ["Male", "Female"]
           description: Gender of the person.
         experience:
           type: array
@@ -179,9 +176,11 @@ components:
           description: Educational background of the person.
       required:
         - person_name
+        - person_linkedin
         - highlights
         - experience
         - education
+        - gender
     Experience:
       type: object
       description: Work experience details.

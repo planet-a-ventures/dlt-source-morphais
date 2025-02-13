@@ -1,3 +1,4 @@
+from enum import StrEnum
 import importlib
 from pydantic import (
     BaseModel,
@@ -7,6 +8,10 @@ from pydantic import (
     model_serializer,
     field_validator,
 )
+
+
+class Degree(StrEnum):
+    UNKNOWN = "Degree unknown"
 
 
 class MyBaseModel(BaseModel):
@@ -66,11 +71,11 @@ class MyBaseModel(BaseModel):
         cls, v, handler: ValidatorFunctionWrapHandler, info: ValidationInfo
     ):
         spec_module = importlib.import_module(".spec", package=__package__)
-        Experience = getattr(spec_module, "Education")
+        Education = getattr(spec_module, "Education")
         NoStartDate = getattr(spec_module, "EducationStart").NO_START_DATE.value
         Present = getattr(spec_module, "EducationEnd").PRESENT.value
 
-        if cls == Experience:
+        if cls == Education:
             ret = MyBaseModel.parse_possibly_broken_date(v, handler)
             if info.field_name == "education_start" and v == NoStartDate:
                 return None
@@ -80,3 +85,22 @@ class MyBaseModel(BaseModel):
                 return ret
         else:
             return handler(v)
+
+    @field_validator("education_degree", mode="wrap", check_fields=False)
+    def custom_parse_education_degree(cls, v, handler: ValidatorFunctionWrapHandler):
+        spec_module = importlib.import_module(".spec", package=__package__)
+        Education = getattr(spec_module, "Education")
+
+        if cls == Education and v == Degree.UNKNOWN.value:
+            return None
+        else:
+            return handler(v)
+
+    @model_serializer(mode="wrap")
+    def serialize_model(self, nxt):
+        spec_module = importlib.import_module(".spec", package=__package__)
+        Experience = getattr(spec_module, "Experience")
+        ret = nxt(self)
+        if self.__class__ == Experience:
+            return ret | {"experience_founder": bool(self.experience_founder)}
+        return ret

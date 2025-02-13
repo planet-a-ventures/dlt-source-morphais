@@ -1,5 +1,6 @@
 {
     "python.testing.pytestArgs": [
+        "--capture=no",
         "dlt_source_morphais"
     ],
     "python.testing.unittestEnabled": false,

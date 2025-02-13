@@ -13,7 +13,9 @@ def load_morphais_data() -> None:
     )
     # if DEV_MODE:
     #     data.add_limit(1)
-    info = pipeline.run(data, refresh="drop_sources", schema_contract={"columns": "evolve"})
+    info = pipeline.run(
+        data, refresh="drop_sources", schema_contract={"columns": "evolve"}
+    )
     print(info)
 
 

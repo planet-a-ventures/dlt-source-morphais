@@ -18,7 +18,8 @@ from pydantic import BaseModel
 from .rest_client import get_rest_client, MAX_PAGE_LIMIT
 from .type_adapters import startup_adapter, list_adapter
 from .model.spec import Startup
-#from .model.my_spec import ExtendedStartup as Startup
+
+# from .model.my_spec import ExtendedStartup as Startup
 from dlt.sources.helpers.rest_client.client import PageData
 
 
@@ -33,6 +34,7 @@ def pydantic_model_dump(model: BaseModel, **kwargs):
 class Table(StrEnum):
     STARTUPS = "startups"
     PERSONS = "persons"
+
 
 if is_logging():
     # ignore https://github.com/dlt-hub/dlt/blob/268768f78bd7ea7b2df8ca0722faa72d4d4614c5/dlt/extract/hints.py#L390-L393
@@ -64,8 +66,7 @@ def list_startups() -> Iterable[TDataItem]:
     rest_client = get_rest_client()
 
     yield from (
-        [__get_id(entity) for entity in
-        list_adapter.validate_python(entities)]
+        [__get_id(entity) for entity in list_adapter.validate_python(entities)]
         for entities in rest_client.paginate(
             LIST_STARTUPS, params={"take": MAX_PAGE_LIMIT}
         )
@@ -86,6 +87,7 @@ def parse_startup(startup: PageData[Any]):
         logging.error(e)
     return ret
 
+
 async def fetch_startup(id: UUID):
     rest_client = get_rest_client(single_page=True)
     # Wrap the synchronous paginate call in asyncio.to_thread
@@ -97,14 +99,18 @@ async def fetch_startup(id: UUID):
             )
         )
     )
-    return [parsed for parsed in (parse_startup(startup) for startup in startups) if parsed is not None]
-    
+    return [
+        parsed
+        for parsed in (parse_startup(startup) for startup in startups)
+        if parsed is not None
+    ]
+
 
 @dlt.transformer(
-    #primary_key="id",
-    #columns=Startup,
+    # primary_key="id",
+    # columns=Startup,
     max_table_nesting=1,
-    #write_disposition="replace",
+    # write_disposition="replace",
     parallelized=True,
     name=Table.STARTUPS.value,
 )
@@ -119,8 +125,7 @@ async def startup_details(ids: List[UUID]):
         for startup in startups:
             for person in startup.persons:
                 yield dlt.mark.with_hints(
-                    item=pydantic_model_dump(person)
-                    | {"startup_id": startup.id},
+                    item=pydantic_model_dump(person) | {"startup_id": startup.id},
                     hints=dlt.mark.make_hints(
                         table_name=Table.PERSONS.value,
                         references=[
@@ -136,12 +141,13 @@ async def startup_details(ids: List[UUID]):
                 )
 
             yield dlt.mark.with_hints(
-                    item=use_id(startup, exclude={"persons"}),
-                    hints=dlt.mark.make_hints(
-                        table_name=Table.STARTUPS.value,
-                    ),
-                    create_table_variant=True,
+                item=use_id(startup, exclude={"persons"}),
+                hints=dlt.mark.make_hints(
+                    table_name=Table.STARTUPS.value,
+                ),
+                create_table_variant=True,
             )
+
 
 # async def startup_details(
 #     ids: List[UUID],
@@ -231,9 +237,7 @@ def source(dev_mode: bool = False) -> Sequence[DltResource]:
     if dev_mode:
         startups_list = startups_list.add_limit(5)
 
-    return (
-        startups_list | startup_details,
-    )
+    return (startups_list | startup_details,)
 
 
 __all__ = ["source"]

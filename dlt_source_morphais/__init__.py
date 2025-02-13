@@ -17,17 +17,17 @@ from .settings import LIST_STARTUPS, STARTUP
 from pydantic import BaseModel
 from .rest_client import get_rest_client, MAX_PAGE_LIMIT
 from .type_adapters import startup_adapter, list_adapter
-#from .model.spec import Startup, StartupListItem
-from .model.my_spec import ExtendedStartup as Startup
+from .model.spec import Startup
+#from .model.my_spec import ExtendedStartup as Startup
 from dlt.sources.helpers.rest_client.client import PageData
 
 
 def pydantic_model_dump(model: BaseModel, **kwargs):
     """
-    Dumps a Pydantic model to a dictionary, using the model's field names as keys AND observing the field aliases,
+    Dumps a Pydantic model to a dictionary, using the model's field names as keys and NOT observing the field aliases,
     which is important for DLT to correctly map the data to the destination.
     """
-    return model.model_dump(by_alias=False, **kwargs)
+    return model.model_dump(by_alias=True, **kwargs)
 
 
 class Table(StrEnum):
@@ -229,7 +229,7 @@ def source(dev_mode: bool = False) -> Sequence[DltResource]:
 
     startups_list = list_startups()
     if dev_mode:
-        startups_list = startups_list.add_limit(1)
+        startups_list = startups_list.add_limit(5)
 
     return (
         startups_list | startup_details,

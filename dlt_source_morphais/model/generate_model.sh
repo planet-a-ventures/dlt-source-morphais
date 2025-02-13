@@ -27,9 +27,9 @@ main() {
         --input-file-type openapi \
         --field-constraints \
         --use-double-quotes \
+        --base-class ..MyBaseModel \
         --disable-timestamp \
-        --target-python-version "${python_version}" \
-        --aliases aliases.json
+        --target-python-version "${python_version}"
 
     log "Generated code"
 

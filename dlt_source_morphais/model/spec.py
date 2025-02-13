@@ -8,10 +8,12 @@ from enum import Enum
 from typing import Annotated, List
 from uuid import UUID
 
-from pydantic import AnyUrl, BaseModel, Field, constr
+from pydantic import AnyUrl, Field, constr
+
+from . import MyBaseModel
 
 
-class StartupListItem(BaseModel):
+class StartupListItem(MyBaseModel):
     id: UUID
     """
     Unique identifier for the startup.
@@ -26,7 +28,7 @@ class StartupListItem(BaseModel):
     """
 
 
-class Resources(BaseModel):
+class Resources(MyBaseModel):
     website: (
         AnyUrl
         | constr(
@@ -53,7 +55,7 @@ class Resources(BaseModel):
     """
     GitHub repository URL.
     """
-    filing_history: Annotated[AnyUrl | None, Field(alias="filling_history")] = None
+    filling_history: AnyUrl | None = None
     """
     Filing registry URL.
     """
@@ -64,20 +66,20 @@ class Gender(Enum):
     FEMALE = "Female"
 
 
-class Start(Enum):
+class ExperienceStart(Enum):
     NO_START_DATE = "No start date"
 
 
-class End(Enum):
+class ExperienceEnd(Enum):
     PRESENT = "Present"
 
 
-class Experience(BaseModel):
-    company: Annotated[str | None, Field(alias="experience_company")] = None
+class Experience(MyBaseModel):
+    experience_company: str | None = None
     """
     Name of the company where the experience was gained.
     """
-    is_founder: Annotated[int, Field(alias="experience_founder")]
+    experience_founder: int
     """
     Indicator if the person is a founder (0 or 1).
     """
@@ -85,11 +87,11 @@ class Experience(BaseModel):
     """
     Role of the person at the company.
     """
-    start: Annotated[date | Start, Field(alias="experience_start")]
+    experience_start: date | ExperienceStart
     """
     Start date of the experience, or "No start date" if unknown.
     """
-    end: Annotated[date | End, Field(alias="experience_end")]
+    experience_end: date | ExperienceEnd
     """
     End date of the experience (or "Present" if ongoing).
     """
@@ -103,7 +105,7 @@ class EducationEnd(Enum):
     PRESENT = "Present"
 
 
-class Education(BaseModel):
+class Education(MyBaseModel):
     education_school: str | None = None
     """
     Name of the school or college.
@@ -126,14 +128,12 @@ class Education(BaseModel):
     """
 
 
-class Person(BaseModel):
-    name: Annotated[str, Field(alias="person_name")]
+class Person(MyBaseModel):
+    person_name: str
     """
     Name of the person.
     """
-    linkedin_profile_url: Annotated[AnyUrl | None, Field(alias="person_linkedin")] = (
-        None
-    )
+    person_linkedin: AnyUrl | None = None
     """
     LinkedIn profile URL of the person.
     """
@@ -155,7 +155,7 @@ class Person(BaseModel):
     """
 
 
-class Startup(BaseModel):
+class Startup(MyBaseModel):
     id: UUID
     """
     Unique identifier for the startup.

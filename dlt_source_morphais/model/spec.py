@@ -47,26 +47,26 @@ class Resources(BaseModel):
     """
     GitHub repository URL.
     """
-    filling_history: AnyUrl | None = None
+    filing_history: Annotated[AnyUrl | None, Field(alias="filling_history")] = None
     """
     Filing registry URL.
     """
 
 
-class ExperienceStart(Enum):
+class Start(Enum):
     NO_START_DATE = "No start date"
 
 
-class ExperienceEnd(Enum):
+class End(Enum):
     PRESENT = "Present"
 
 
 class Experience(BaseModel):
-    experience_company: str | None = None
+    company: Annotated[str | None, Field(alias="experience_company")] = None
     """
     Name of the company where the experience was gained.
     """
-    experience_founder: int
+    is_founder: Annotated[int, Field(alias="experience_founder")]
     """
     Indicator if the person is a founder (0 or 1).
     """
@@ -74,11 +74,11 @@ class Experience(BaseModel):
     """
     Role of the person at the company.
     """
-    experience_start: date | ExperienceStart
+    start: Annotated[date | Start, Field(alias="experience_start")]
     """
     Start date of the experience, or "No start date" if unknown.
     """
-    experience_end: date | ExperienceEnd
+    end: Annotated[date | End, Field(alias="experience_end")]
     """
     End date of the experience (or "Present" if ongoing).
     """
@@ -116,11 +116,13 @@ class Education(BaseModel):
 
 
 class Person(BaseModel):
-    person_name: str
+    name: Annotated[str, Field(alias="person_name")]
     """
     Name of the person.
     """
-    person_linkedin: AnyUrl | None = None
+    linkedin_profile_url: Annotated[AnyUrl | None, Field(alias="person_linkedin")] = (
+        None
+    )
     """
     LinkedIn profile URL of the person.
     """

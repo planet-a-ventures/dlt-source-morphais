@@ -7,6 +7,8 @@ from dlt.sources.helpers.rest_client.paginators import (
     PageNumberPaginator,
     SinglePagePaginator,
 )
+from urllib3 import Retry
+from requests.adapters import HTTPAdapter
 
 from .settings import API_BASE
 from dlt.sources.helpers.requests.session import Session
@@ -40,6 +42,9 @@ def get_rest_client(
     )
     if not session:
         session = client.session
+        retry = Retry(total=5, backoff_factor=0.2, status_forcelist=[521])
+        adapter = HTTPAdapter(max_retries=retry)
+        session.mount(API_BASE, adapter)
     return client
 
 

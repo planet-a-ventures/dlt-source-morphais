@@ -28,7 +28,8 @@ main() {
         --field-constraints \
         --use-double-quotes \
         --disable-timestamp \
-        --target-python-version "${python_version}"
+        --target-python-version "${python_version}" \
+        --aliases aliases.json
 
     log "Generated code"
 

@@ -8,7 +8,7 @@ from enum import Enum
 from typing import Annotated, List
 from uuid import UUID
 
-from pydantic import AnyUrl, BaseModel, Field
+from pydantic import AnyUrl, BaseModel, Field, constr
 
 
 class StartupListItem(BaseModel):
@@ -27,7 +27,13 @@ class StartupListItem(BaseModel):
 
 
 class Resources(BaseModel):
-    website: AnyUrl | None = None
+    website: (
+        AnyUrl
+        | constr(
+            pattern=r"^(([a-zA-Z0-9] | [a-zA-Z0-9][a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])\.)*([A-Za-z0-9] | [A-Za-z0-9][A-Za-z0-9\-]{0,61}[A-Za-z0-9])$"
+        )
+        | None
+    ) = None
     """
     Website URL of the startup.
     """
@@ -51,6 +57,11 @@ class Resources(BaseModel):
     """
     Filing registry URL.
     """
+
+
+class Gender(Enum):
+    MALE = "Male"
+    FEMALE = "Female"
 
 
 class Start(Enum):
@@ -130,7 +141,7 @@ class Person(BaseModel):
     """
     List of highlights for the person.
     """
-    gender: str | None = None
+    gender: Gender | None
     """
     Gender of the person.
     """

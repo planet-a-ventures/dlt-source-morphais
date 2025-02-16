@@ -214,7 +214,7 @@ class Startup(MyBaseModel):
     """
     City where the startup is located.
     """
-    country: str
+    country: str | None = None
     """
     Country where the startup is located.
     """

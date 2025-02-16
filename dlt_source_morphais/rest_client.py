@@ -59,4 +59,4 @@ def raise_if_error(response: Response, *args: Any, **kwargs: Any) -> None:
 
 hooks = {"response": [raise_if_error]}
 MAX_PAGE_LIMIT = 50
-BASE_PAGE = 199
+BASE_PAGE = 1

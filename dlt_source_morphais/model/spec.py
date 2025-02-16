@@ -166,7 +166,7 @@ class Startup(MyBaseModel):
     """
     Unique identifier for the startup.
     """
-    name: str
+    name: str | None = None
     """
     Name of the startup.
     """
@@ -174,7 +174,7 @@ class Startup(MyBaseModel):
     """
     A short description of the startup.
     """
-    desc_long: str
+    desc_long: str | None = None
     """
     A long description of the startup.
     """

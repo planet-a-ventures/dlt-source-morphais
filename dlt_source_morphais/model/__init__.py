@@ -115,7 +115,7 @@ class MyBaseModel(BaseModel):
             return handler(v)
 
     @field_validator("funding_stage", mode="wrap", check_fields=False)
-    def custom_parse_legal_form(cls, v, handler: ValidatorFunctionWrapHandler):
+    def custom_parse_funding_stage(cls, v, handler: ValidatorFunctionWrapHandler):
         spec_module = importlib.import_module(".spec", package=__package__)
         Startup = getattr(spec_module, "Startup")
 

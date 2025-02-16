@@ -38,9 +38,13 @@ def test_degree_unknown():
         "persons": [
             {
                 "person_name": "John Doe",
+                "gender": None,
+                "experience": [],
                 "highlights": [],
                 "education": [
                     {
+                        "education_start": "2021-01-01",
+                        "education_end": "2021-02-01",
                         "education_degree": Degree.UNKNOWN.value,
                     }
                 ],

@@ -123,7 +123,7 @@ components:
           type: [string, "null"]
           description: City where the startup is located.
         country:
-          type: string
+          type: [string, "null"]
           description: Country where the startup is located.
         address:
           type: [string, "null"]

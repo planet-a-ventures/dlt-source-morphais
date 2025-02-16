@@ -18,6 +18,12 @@ components:
       name: morphaiskey
       description: API key generated from the Morphais dashboard.
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "There are no startups available."
     StartupListItem:
       type: object
       description: A startup item returned in the list (subset of fields).
@@ -350,11 +356,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "There are no startups available."
+                $ref: "#/components/schemas/ErrorResponse"
   /startup:
     get:
       summary: Get startup details

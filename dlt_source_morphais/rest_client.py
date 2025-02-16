@@ -2,7 +2,7 @@ from typing import Any
 
 import dlt
 from dlt.sources.helpers.rest_client.auth import APIKeyAuth
-from dlt.sources.helpers.rest_client.client import RESTClient
+from dlt.sources.helpers.rest_client.client import RESTClient, Response
 from dlt.sources.helpers.rest_client.paginators import (
     PageNumberPaginator,
     SinglePagePaginator,
@@ -12,6 +12,7 @@ from requests.adapters import HTTPAdapter
 
 from .settings import API_BASE
 from dlt.sources.helpers.requests.session import Session
+from .type_adapters import error_adapter
 
 
 # Share a session (and thus pool) between all rest clients
@@ -34,7 +35,7 @@ def get_rest_client(
             SinglePagePaginator()
             if single_page
             else PageNumberPaginator(
-                base_page=1,
+                base_page=BASE_PAGE,
                 stop_after_empty_page=True,
                 total_path=None,
             )
@@ -49,4 +50,13 @@ def get_rest_client(
     return client
 
 
+def raise_if_error(response: Response, *args: Any, **kwargs: Any) -> None:
+    if response.status_code < 200 or response.status_code >= 300:
+        error = error_adapter.validate_json(response.text)
+        response.reason = "\n".join([e.message for e in error.errors])
+        response.raise_for_status()
+
+
+hooks = {"response": [raise_if_error]}
 MAX_PAGE_LIMIT = 50
+BASE_PAGE = 199

@@ -15,7 +15,7 @@ import re
 from dlt.common.libs.pydantic import DltConfig
 from .settings import LIST_STARTUPS, STARTUP
 from pydantic import BaseModel
-from .rest_client import get_rest_client, MAX_PAGE_LIMIT
+from .rest_client import get_rest_client, MAX_PAGE_LIMIT, hooks
 from .type_adapters import startup_adapter, list_adapter
 from .model.spec import Startup
 
@@ -81,7 +81,7 @@ def list_startups() -> Iterable[TDataItem]:
     yield from (
         [__get_id(entity) for entity in list_adapter.validate_python(entities)]
         for entities in rest_client.paginate(
-            LIST_STARTUPS, params={"take": MAX_PAGE_LIMIT}
+            LIST_STARTUPS, params={"take": MAX_PAGE_LIMIT}, hooks=hooks
         )
     )
 
@@ -104,12 +104,7 @@ async def fetch_startup(id: UUID):
     rest_client = get_rest_client(single_page=True)
     # Wrap the synchronous paginate call in asyncio.to_thread
     startups = await asyncio.to_thread(
-        lambda: list(
-            rest_client.paginate(
-                STARTUP,
-                params={"id": str(id)},
-            )
-        )
+        lambda: list(rest_client.paginate(STARTUP, params={"id": str(id)}, hooks=hooks))
     )
     return [
         parsed

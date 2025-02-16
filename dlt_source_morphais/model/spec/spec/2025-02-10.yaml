@@ -51,13 +51,13 @@ components:
           format: uuid
           description: Unique identifier for the startup.
         name:
-          type: string
+          type: [string, "null"]
           description: Name of the startup.
         desc_short:
           type: [string, "null"]
           description: A short description of the startup.
         desc_long:
-          type: string
+          type: [string, "null"]
           description: A long description of the startup.
         industries:
           type: array

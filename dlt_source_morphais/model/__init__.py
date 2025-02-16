@@ -18,6 +18,10 @@ class LegalForm(StrEnum):
     NO_LEGAL_FORM = "No legal form"
 
 
+class FundingStage(StrEnum):
+    NO_FUNDING_ROUND = "No funding round"
+
+
 class MyBaseModel(BaseModel):
 
     @staticmethod
@@ -106,6 +110,16 @@ class MyBaseModel(BaseModel):
         Startup = getattr(spec_module, "Startup")
 
         if cls == Startup and v == LegalForm.NO_LEGAL_FORM.value:
+            return None
+        else:
+            return handler(v)
+
+    @field_validator("funding_stage", mode="wrap", check_fields=False)
+    def custom_parse_legal_form(cls, v, handler: ValidatorFunctionWrapHandler):
+        spec_module = importlib.import_module(".spec", package=__package__)
+        Startup = getattr(spec_module, "Startup")
+
+        if cls == Startup and v == FundingStage.NO_FUNDING_ROUND.value:
             return None
         else:
             return handler(v)

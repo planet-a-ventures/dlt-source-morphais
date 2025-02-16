@@ -1,7 +1,7 @@
 from datetime import date
 import json
 
-from .. import Degree, LegalForm
+from .. import Degree, LegalForm, FundingStage
 from ..spec import EducationEnd, EducationStart, Startup, ExperienceEnd, ExperienceStart
 
 base = {
@@ -67,6 +67,15 @@ def test_legal_form():
     }
     s = Startup(**d)
     assert s.legal_form is None
+
+
+def test_funding_stage():
+    d = {
+        **base,
+        "funding_stage": FundingStage.NO_FUNDING_ROUND.value,
+    }
+    s = Startup(**d)
+    assert s.funding_stage is None
 
 
 def test_date_broken():

@@ -18,7 +18,7 @@ class StartupListItem(MyBaseModel):
     """
     Unique identifier for the startup.
     """
-    name: str
+    name: str | None = None
     """
     Name of the startup.
     """

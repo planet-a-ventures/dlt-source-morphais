@@ -13,6 +13,12 @@ from pydantic import AnyUrl, Field, constr
 from . import MyBaseModel
 
 
+class ErrorResponse(MyBaseModel):
+    error: Annotated[
+        str | None, Field(examples=["There are no startups available."])
+    ] = None
+
+
 class StartupListItem(MyBaseModel):
     id: UUID
     """

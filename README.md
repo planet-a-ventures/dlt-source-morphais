@@ -51,18 +51,21 @@ pipeline.run(morphais_data)
 
 This project is using [devenv](https://devenv.sh/).
 
+Commands:
+
+| Command | What does it do? |
+| -- | -- |
+| `generate-model` | generates the morphais Pydantic model from the current spec file, applies patches, etc. |
+| `update-spec` | Pulls in the latest `main#HEAD` of [planet-a-ventures/morphais-openapi-spec](https://github.com/planet-a-ventures/morphais-openapi-spec) |
+| `refresh-model` | Both commands above plus adds it to git and commits the changes. |
+| `format` | Formats & lints all code |
+| `sample-pipeline-run` | Runs the sample pipeline. By default `dev_mode=True` which fetches resources with a limit of 1 (page) |
+| `sample-pipeline-show` | Starts the streamlit-based dlt hub |
+
 ### Run the sample
 
 ```sh
 MORPHAIS_EMAIL=[...] \
    MORPHAIS_API_KEY=[...] \
-   python morphais_pipeline.py
-```
-
-### Regenerate the model
-
-Run
-
-```sh
-generate-model
+   sample-pipeline-run
 ```

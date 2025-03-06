@@ -210,7 +210,7 @@ wheels = [
 
 [[package]]
 name = "dlt"
-version = "1.6.1"
+version = "1.8.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -242,9 +242,9 @@ dependencies = [
     { name = "tzdata" },
     { name = "win-precise-time", marker = "os_name == 'nt'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/92/c0/fb17676de190121db2fc1df4b478bc4f4b10dc7d7e8f7ab743abb150eaaa/dlt-1.6.1.tar.gz", hash = "sha256:df3afccf41c6ff028f7d1ba6b9c84e404b27d815c9c0623ba1b9f22990cf24c4", size = 700101 }
+sdist = { url = "https://files.pythonhosted.org/packages/35/70/826c592ba42f6f242ab88172917d24f1f74233ccd331af27683479f7fdea/dlt-1.8.0.tar.gz", hash = "sha256:4b924c5793c003568a596d60211dc7d1b6c1589e61ccefe55b271f7ffc47519f", size = 712165 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/34/77/45520f098888c593ff9bf7a8c38bd45db6db0c2a138b0c6829c58b65dc93/dlt-1.6.1-py3-none-any.whl", hash = "sha256:30a2b9ac6d93f38289c85c305ab6f19cf50e6457d4891346260969d36b735e6b", size = 884349 },
+    { url = "https://files.pythonhosted.org/packages/12/cd/98b15309aa872ef3698d31ccae7529b4bd57bef4f206cbeb37c6731d09a1/dlt-1.8.0-py3-none-any.whl", hash = "sha256:72a275b08936fede9ba570b7a577379d10e3f28cc7792932dc278b58e435500f", size = 897470 },
 ]
 
 [package.optional-dependencies]
@@ -287,7 +287,7 @@ wheels = [
 
 [[package]]
 name = "dlt-source-morphais"
-version = "0.1.4"
+version = "0.0.2"
 source = { virtual = "." }
 dependencies = [
     { name = "dlt" },
@@ -308,8 +308,8 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "dlt", specifier = ">=1.5.0" },
-    { name = "dlt", extras = ["duckdb"], marker = "extra == 'show'", specifier = ">=1.5.0" },
+    { name = "dlt", specifier = ">=1.8.0" },
+    { name = "dlt", extras = ["duckdb"], marker = "extra == 'show'", specifier = ">=1.8.0" },
     { name = "streamlit", marker = "extra == 'show'", specifier = ">=1.41.1" },
     { name = "watchdog", marker = "extra == 'show'", specifier = ">=6.0.0" },
 ]

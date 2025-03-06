@@ -8,11 +8,13 @@ import dlt
 from dlt.common.typing import TDataItem
 from dlt.sources import DltResource
 from dlt.common.logger import is_logging
-from pydantic import ValidationError
+from pydantic import AnyUrl, ValidationError
 import asyncio
 import re
 
 from dlt.common.libs.pydantic import DltConfig
+from dlt.common import json
+from dlt.common.json import JsonSerializable
 from .settings import LIST_STARTUPS, STARTUP
 from pydantic import BaseModel
 from .rest_client import get_rest_client, MAX_PAGE_LIMIT, hooks
@@ -20,6 +22,15 @@ from .type_adapters import startup_adapter, list_adapter
 from .model.spec import Startup
 
 from dlt.sources.helpers.rest_client.client import PageData
+
+
+def anyurl_encoder(obj: Any) -> JsonSerializable:
+    if isinstance(obj, AnyUrl):
+        return obj.unicode_string()
+    raise TypeError(f"Object of type {type(obj)} is not JSON serializable")
+
+
+json.set_custom_encoder(anyurl_encoder)
 
 
 def pydantic_model_dump(model: BaseModel, **kwargs):

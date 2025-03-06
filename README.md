@@ -69,3 +69,11 @@ MORPHAIS_EMAIL=[...] \
    MORPHAIS_API_KEY=[...] \
    sample-pipeline-run
 ```
+
+alternatively you can also create a `.dlt/secrets.toml`
+(excluded from git) with the following content:
+
+```toml
+morphais_api_key="..."
+morphais_email="you@domain.com"
+```

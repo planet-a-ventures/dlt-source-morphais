@@ -44,6 +44,7 @@ def pydantic_model_dump(model: BaseModel, **kwargs):
 class Table(StrEnum):
     STARTUPS = "startups"
     PERSONS = "persons"
+    HIGHLIGHTS = "highlights"
 
 
 if is_logging():
@@ -168,7 +169,7 @@ async def startup_details(ids: List[UUID]):
                     yield dlt.mark.with_hints(
                         item=highlight,
                         hints=dlt.mark.make_hints(
-                            table_name="highlights",
+                            table_name=Table.HIGHLIGHTS.value,
                             primary_key="value",
                             merge_key="value",
                             write_disposition="merge",

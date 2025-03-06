@@ -9,6 +9,21 @@ keywords: [Morphais API, morphais.com]
 
 [DLT](htps://www.github.com/dlt-hub/dlt) source for [Morphais](https://www.morphais.com/).
 
+Currently loads the following data:
+
+| Table | Contains |
+| -- | -- |
+| `persons` | Items of the `Person` model with all properties |
+| `persons_*` | Multi-value properties derived of the `Person` model |
+| `highlights` | Unique [highlights](https://morphais.readme.io/reference/filter-functions#highlights) |
+| `audiences` | Unique audiences (B2B, B2C, etc.)  |
+| `legal_forms` | Unique legal forms (GmbH, Ltd., etc.) |
+| `funding_stages` | Unique funding stages (Pre-Seed, Seed, etc.)  |
+| `industries` | Unique [industries](https://morphais.readme.io/reference/filter-functions#industries) |
+| `solutions` | Unique [solutions](https://morphais.readme.io/reference/filter-functions#solutions) |
+| `startups` | Items of the `Startup` model with all properties |
+| `startups_*` | Multi-value properties derived of the `Startup` model |
+
 ## Usage
 
 Create a `.dlt/secrets.toml` with your API key and email:

@@ -47,9 +47,11 @@
     typos.enable = true;
     yamllint.enable = true;
     yamlfmt.enable = true;
+    yamlfmt.settings.lint-only = false;
     check-toml.enable = true;
     commitizen.enable = true;
     nixfmt-rfc-style.enable = true;
+    mdformat.enable = true;
     markdownlint.enable = true;
   };
 

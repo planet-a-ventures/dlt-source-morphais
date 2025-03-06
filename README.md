@@ -1,8 +1,3 @@
----
-description: dlt source for morphais.com
-keywords: [Morphais API, morphais.com]
----
-
 # dlt-source-morphais
 
 [![PyPI version](https://img.shields.io/pypi/v/dlt-source-morphais)](https://pypi.org/project/dlt-source-morphais/)

@@ -52,6 +52,11 @@
     commitizen.enable = true;
     nixfmt-rfc-style.enable = true;
     mdformat.enable = true;
+    mdformat.package = pkgs.mdformat.withPlugins (
+      ps: with ps; [
+        mdformat-frontmatter
+      ]
+    );
     markdownlint.enable = true;
   };
 

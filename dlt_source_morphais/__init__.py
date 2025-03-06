@@ -153,6 +153,18 @@ async def startup_details(ids: List[UUID]):
                     # needs to be a variant due to https://github.com/dlt-hub/dlt/pull/2109
                     create_table_variant=True,
                 )
+                for highlight in person.highlights:
+                    yield dlt.mark.with_hints(
+                        item=highlight,
+                        hints=dlt.mark.make_hints(
+                            table_name="highlights",
+                            primary_key="value",
+                            merge_key="value",
+                            write_disposition="merge",
+                        ),
+                        # needs to be a variant due to https://github.com/dlt-hub/dlt/pull/2109
+                        create_table_variant=True,
+                    )
 
             for field_name in enum_fields:
                 data = getattr(startup, field_name)

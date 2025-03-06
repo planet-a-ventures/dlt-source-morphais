@@ -2,6 +2,7 @@ from enum import StrEnum
 import importlib
 from pydantic import (
     BaseModel,
+    ConfigDict,
     ValidationError,
     ValidationInfo,
     ValidatorFunctionWrapHandler,
@@ -23,6 +24,10 @@ class FundingStage(StrEnum):
 
 
 class MyBaseModel(BaseModel):
+
+    # Some of the `highlights` fields have leading whitespaces
+    # This will strip them
+    model_config = ConfigDict(str_strip_whitespace=True)
 
     @staticmethod
     def parse_possibly_broken_date(v, handler: ValidatorFunctionWrapHandler):

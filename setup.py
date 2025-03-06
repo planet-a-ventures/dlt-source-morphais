@@ -10,7 +10,7 @@ setup(
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
     install_requires=[
-        "dlt>=1.5.0",
+        "dlt>=1.8.0",
     ],
     classifiers=[
         "Programming Language :: Python :: 3.12",

@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="dlt-source-morphais",
-    version="0.0.1",
+    version="0.0.2",
     author="Planet A GmbH",
     author_email="dev@planet-a.com",
     packages=find_packages(exclude=["tests"]),

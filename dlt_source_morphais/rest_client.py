@@ -1,3 +1,4 @@
+from json import dumps
 from typing import Any
 
 import dlt
@@ -53,7 +54,11 @@ def get_rest_client(
 def raise_if_error(response: Response, *args: Any, **kwargs: Any) -> None:
     if response.status_code < 200 or response.status_code >= 300:
         error = error_adapter.validate_json(response.text)
-        response.reason = "\n".join([e.message for e in error.errors])
+        response.reason = error.error
+        # TODO: This is not great at all, an error code and/or a 204 response would be a lot better
+        if error.error == "There are no startups available.":
+            response.status_code = 204  # No Content
+            response._content = dumps([]).encode("utf-8")
         response.raise_for_status()
 
 

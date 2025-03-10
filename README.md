@@ -7,7 +7,7 @@ keywords: [Morphais API, morphais.com]
 
 [![PyPI version](https://img.shields.io/pypi/v/dlt-source-morphais)](https://pypi.org/project/dlt-source-morphais/)
 
-[DLT](htps://www.github.com/dlt-hub/dlt) source for [Morphais](https://www.morphais.com/).
+[DLT](https://dlthub.com/) source for [Morphais](https://www.morphais.com/).
 
 Currently loads the following data:
 

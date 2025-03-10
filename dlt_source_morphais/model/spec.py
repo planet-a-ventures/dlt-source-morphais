@@ -135,7 +135,7 @@ class Education(MyBaseModel):
 
 
 class Person(MyBaseModel):
-    person_name: str
+    person_name: str | None = None
     """
     Name of the person.
     """

@@ -43,6 +43,10 @@ class MyBaseModel(BaseModel):
     def custom_parse_resources(cls, v):
         # if self.__class__.__qualname__ == "Resources":
         for key, value in v.items():
+
+            # Fixes things like `filling_history: "    "`
+            value = value.strip() or None if value else None
+
             # transforms any hostname only 'url' to a full url
             v[key] = (
                 f"http://{value}"

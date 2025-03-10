@@ -155,7 +155,8 @@ components:
       description: Information about a person (e.g., a founder) related to the startup.
       properties:
         person_name:
-          type: string
+          # Sometimes person names are not available
+          type: [string, "null"]
           description: Name of the person.
         person_linkedin:
           type: [string, "null"]
